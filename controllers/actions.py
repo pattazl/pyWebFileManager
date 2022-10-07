@@ -48,7 +48,7 @@ def do_upload():
     data = request.files.get('myFile')
     #print data
     # name, ext = os.path.splitext(data.filename) 
-    serverPath = config.full_path + path + os.altsep + uploadFileName
+    serverPath = config.root_path + path + os.altsep + uploadFileName
     #return serverPath
     if (os.path.exists(serverPath)):
         return "Server File: '"+serverPath+"' is exist"
@@ -63,8 +63,8 @@ def rename():
     """Rename a file/directory : only the admin can do this."""
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
-    srcPath = config.full_path+'/'+request.GET.get('srcPath').decode('utf-8').encode(syscode)
-    dstPath = config.full_path+'/'+request.GET.get('dstPath').decode('utf-8').encode(syscode)
+    srcPath = config.root_path+'/'+request.GET.get('srcPath').decode('utf-8').encode(syscode)
+    dstPath = config.root_path+'/'+request.GET.get('dstPath').decode('utf-8').encode(syscode)
     itemId = request.GET.get('itemId');
 
     if srcPath == dstPath:
@@ -78,7 +78,7 @@ def rename():
             print("Can't rename file")
             print(repr(e))
     return '{"itemId": "'+itemId+'", "filetype": "'+utils.get_icon(
-        config.full_path, request.GET.get('path'), dstPath)+'"}'
+        config.root_path, request.GET.get('path'), dstPath)+'"}'
 
 
 @route(config.app_dir+'/download')
@@ -87,7 +87,7 @@ def download():
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
     filename = request.GET.get('path')
-    return static_file(filename, root=config.full_path, download=filename)
+    return static_file(filename, root=config.root_path, download=filename)
 
 
 @route(config.app_dir+'/delete')
@@ -95,7 +95,7 @@ def delete():
     """Delete a file : only the admin can do this."""
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
-    filePath = config.full_path + request.GET.get('path')
+    filePath = config.root_path + request.GET.get('path')
     if config.log_debug:
         print("deleted file : "+filePath)
     try:

@@ -29,7 +29,7 @@ def list():
             toplevel  = '/'
     else:
         toplevel = False
-    current_dir = config.full_path + path
+    current_dir = config.root_path + path
     all_files = os.listdir(current_dir)
     dir_list = [d for d in os.listdir(current_dir) if os.path.isdir(os.path.join(current_dir, d))]
     f = current_dir + "/.settings"
@@ -52,13 +52,13 @@ def list():
                 filepath = path + item
             else:
                 filepath = path + "/" + item
-            file = config.full_path + path + '/' + item
-            fileList.append({"name": item.decode(syscode).encode("utf-8"), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.full_path, request.GET.get('path'), item),
-                "date": utils.date_file(config.full_path +filepath), "size": utils.get_file_size(config.full_path + filepath),
+            file = config.root_path + path + '/' + item
+            fileList.append({"name": item.decode(syscode).encode("utf-8"), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
+                "date": utils.date_file(config.root_path +filepath), "size": utils.get_file_size(config.root_path + filepath),
                 "id": id, "chmod":chmod.get_pretty_chmod(file)})
             id = id + 1
 
-    data = {"title": path.decode(syscode).encode("utf-8"), "full_path": config.full_path, "path": path, "list": all_files,
+    data = {"title": path.decode(syscode).encode("utf-8"), "full_path": config.root_path, "path": path, "list": all_files,
         "toplevel": toplevel, "fileList": fileList, "is_auth": is_auth,
         "is_admin": is_admin, "error": request.GET.get('error'), "app_dir": config.app_dir}
     return dict(data=data)
@@ -68,7 +68,7 @@ def search():
 #   arr = os.path.split(path)
 #   path2  = os.altsep.join(arr) 
     path = request.GET.get('path')
-    current_dir = config.full_path + path
+    current_dir = config.root_path + path
     val = request.GET.get('key')
     fileList = []
     for d in os.walk(current_dir):  #parent,dirnames,filenames
@@ -84,7 +84,7 @@ def getFolderSize():
 #   arr = os.path.split(path)
 #   path2  = os.altsep.join(arr) 
     path = request.GET.get('path')
-    current_dir = config.full_path + path
+    current_dir = config.root_path + path
     size = utils.size_format(get_dir_size(current_dir))
     return dict(data=size)
 

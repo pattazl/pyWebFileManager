@@ -81,7 +81,7 @@
             <input id="inputId{{row['id']}}" class="hidden" value="{{row['name']}}" />
             %if data['is_admin']:
               <span class="overlay" style="float: right;" id="overlayId{{row['id']}}">
-                <a href="#" class="renameElement" data-element-path="{{row['path']}}" data-link-id="Id{{row['id']}}"><i class="fa fa-pencil-square-o" title="Rename"></i></a>
+                <a href="javascript:;" class="renameElement" data-element-path="{{row['path']}}" data-link-id="Id{{row['id']}}"><i class="fa fa-pencil-square-o" title="Rename"></i></a>
                 %if row['filetype'] != 'folder-o':
                   <a href="download?path={{row['path']}}"><i class="fa fa-arrow-circle-o-down" title="Download"></i></a>
                   <a href="#" data-toggle="modal" data-target="#deleteModal" data-line-id="{{row['id']}}" data-delete-file-path="{{row['path']}}"><i class="fa fa-trash-o" title="Remove"></i></a>
