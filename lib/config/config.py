@@ -8,3 +8,6 @@ security.accounts = {"test": "test", "test2": "test2"}
 security.admins = ["test2"]
 exclude = []
 log_debug = True
+max_num_search = 1000  
+host = '127.0.0.1'
+port = 8083

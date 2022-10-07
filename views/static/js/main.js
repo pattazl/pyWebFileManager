@@ -226,7 +226,8 @@ async function searchFiles(path, obj) {
       if (res.data.length == 0) {
         hint.html('Not Found!')
       } else {
-        hint.html(res.data.join('<br>'))
+        let count = res?.msg?.count??0, max = res?.msg?.max??0;
+        hint.html(`<div style="color:${count>=max?'red':'blue'}">Found ${count}/${max}</div>${res.data.join('<br>')}`)
       }
 
     }

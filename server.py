@@ -6,6 +6,6 @@ import sys, os, time, urllib2, json
 
 sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib')))
 import controllers
+from config import config
 
-
-run(host='127.0.0.1', port=8083, reloader=False, debug=False)
+run(host=config.host, port=config.port, reloader=True, debug=False)
