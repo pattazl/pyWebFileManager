@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+import sys   #reload()之前必须要引入模块
+reload(sys)
+sys.setdefaultencoding('utf-8')
+syscode = sys.getfilesystemencoding()  # gbk
 from bottle import post, route, request, response, redirect, static_file
 from config import config
 from security import security
@@ -36,18 +41,21 @@ def do_upload():
     """Upload files : only the admin can do this."""
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
-    name = request.forms.get('name')
-    if config.log_debug:
-        print("uploaded file : "+name)
-    path = request.forms.get('path').replace("/" + name, "")
-    data = request.files.get('file')
-    new_file = open(config.full_path + path + name, "w+")
-    if (os.path.exists(new_file)):
-        if config.log_debug:
-            print("user wants to move '"+repr(srcPath)+"' to '"+repr(dstPath))
-        return None
-    new_file.write(data.file.read())
-    return redirect(config.app_dir+"/?path=" + path)
+    uploadFileName = request.forms.get('uploadFileName')
+    #print str(name.decode('utf-8').encode("gbk"))
+    path = request.forms.get('filePath')
+    #data = request.files.get('file')
+    data = request.files.get('myFile')
+    #print data
+    # name, ext = os.path.splitext(data.filename) 
+    serverPath = config.full_path + path + os.altsep + uploadFileName
+    #return serverPath
+    if (os.path.exists(serverPath)):
+        return "Server File: '"+serverPath+"' is exist"
+    #new_file = open(serverPath, "w+")
+    #new_file.write(data.file.read())
+    data.save(serverPath.encode(syscode))
+    redirect(config.app_dir+"/?path=" + path.decode('utf-8').encode(syscode))
 
 
 @route(config.app_dir+'/rename')
@@ -55,9 +63,10 @@ def rename():
     """Rename a file/directory : only the admin can do this."""
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
-    srcPath = config.full_path+'/'+request.GET.get('srcPath')
-    dstPath = config.full_path+'/'+request.GET.get('dstPath')
+    srcPath = config.full_path+'/'+request.GET.get('srcPath').decode('utf-8').encode(syscode)
+    dstPath = config.full_path+'/'+request.GET.get('dstPath').decode('utf-8').encode(syscode)
     itemId = request.GET.get('itemId');
+
     if srcPath == dstPath:
         return None
     if config.log_debug:

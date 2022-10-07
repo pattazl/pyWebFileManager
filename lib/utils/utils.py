@@ -39,10 +39,11 @@ def date_file(path):
     mtime = time.gmtime(os.path.getmtime(path))
     return time.strftime("%d/%m/%Y %H:%M", mtime)
 
-
 def get_file_size(path):
-    """Get file size, human readable."""
     bytes = float(os.path.getsize(path))
+    return size_format(bytes)
+def size_format(bytes):
+    """Get file size, human readable."""
     if bytes >= 1099511627776:
         terabytes = bytes / 1099511627776
         size = '%.2f TB' % terabytes

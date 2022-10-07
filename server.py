@@ -8,4 +8,4 @@ sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib'
 import controllers
 
 
-run(host='0.0.0.0', port=8083, reloader=True, debug=True)
+run(host='127.0.0.1', port=8083, reloader=False, debug=False)

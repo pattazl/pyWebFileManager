@@ -25,7 +25,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{{data['title']}}</a>
+          <div class="navbar-brand">
+            <div style="font-size:12px;">Search files in this folder : <input size=12 value="" onkeypress="searchFiles('{{data['title']}}',this)">
+            <form style="margin:0px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="filePath" value ="{{data['title']}}">
+            <input type="hidden" name="uploadFileName" id="uploadFileName" value ="">
+            Upload File to this folder: <input type="file" name="myFile" id="myFile" style="font-size:12px;display:inline" name="fileUpload"/>
+            <input type="submit" onclick="return uploadFile()" value="上传文件" style="font-size:12px;display:inline" /></div>
+            </form>
+          </div>
         </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <p class="navbar-text navbar-right">
@@ -36,7 +44,7 @@
     </nav>
     <span id="alertMarker"></span>
     <div class="panel panel-default" id="main">
-      <div class="panel-heading">Browse files : {{data['title']}}</div>
+      <div class="panel-heading" >Browse files : <span id="navlink">{{data['title']}}</span></div>
       <table class="table">
         <tr>
           <th style="width: 300px;">Name</th>
@@ -85,6 +93,8 @@
             <td>
               %if row['filetype'] != 'folder-o':
                 {{row['size']}}
+              %else:
+                <div style="cursor:pointer" onclick="getSize('{{row['path']}}',this)" title="click and get size">N/A</div>
               %end
             </td>
             <td>{{row['date']}}</td>
