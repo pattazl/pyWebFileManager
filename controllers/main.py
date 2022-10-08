@@ -57,10 +57,10 @@ def list():
             if not toplevel:
                 filepath = path + item
             else:
-                filepath = path + "/" + item
+                filepath = path + "/" + item 
             file = config.root_path + path + '/' + item
-            item = item.decode(syscode).encode("utf-8")
-            fileList.append({"name": item, "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
+
+            fileList.append({"name": item.decode(syscode).encode("utf-8"), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
                 "date": utils.date_file(config.root_path +filepath), "size": utils.get_file_size(config.root_path + filepath),
                 "id": id, "chmod":chmod.get_pretty_chmod(file)})
             id = id + 1
