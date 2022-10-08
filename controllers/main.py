@@ -9,6 +9,18 @@ from utils import utils, chmod
 import os, json, urllib,re
 
 syscode = sys.getfilesystemencoding()
+def toUTF8(myStr):
+    global syscode
+    if syscode.lower()=='utf-8':
+        return myStr
+    else:
+        try:
+            resStr = myStr.decode(syscode).encode("utf-8")
+        except Exception as e:
+            resStr = myStr
+            syscode = 'utf-8'
+        return resStr
+
 @route('/')
 def redirect_home():
     """Main route : redirect to app home."""
@@ -44,7 +56,7 @@ def list():
         file_list.sort(key=lambda d: d.lower())
         all_files = dir_list + file_list
     except Exception as e:
-        errInfo = {"title": path.decode(syscode).encode("utf-8"), "full_path": config.root_path, "path": path, "list": [],
+        errInfo = {"title": toUTF8(path), "full_path": config.root_path, "path": path, "list": [],
         "toplevel": toplevel, "fileList": [], "is_auth": is_auth,
         "is_admin": is_admin, "error": 'Read Error!'+str(e), "app_dir": config.app_dir}
         return dict(data=errInfo)
@@ -60,12 +72,12 @@ def list():
                 filepath = path + "/" + item 
             file = config.root_path + path + '/' + item
 
-            fileList.append({"name": item.decode(syscode).encode("utf-8"), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
+            fileList.append({"name": toUTF8(item), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
                 "date": utils.date_file(config.root_path +filepath), "size": utils.get_file_size(config.root_path + filepath),
                 "id": id, "chmod":chmod.get_pretty_chmod(file)})
             id = id + 1
 
-    data = {"title": path.decode(syscode).encode("utf-8"), "full_path": config.root_path, "path": path, "list": all_files,
+    data = {"title": toUTF8(path), "full_path": config.root_path, "path": path, "list": all_files,
         "toplevel": toplevel, "fileList": fileList, "is_auth": is_auth,
         "is_admin": is_admin, "error": request.GET.get('error'), "app_dir": config.app_dir}
     return dict(data=data)
