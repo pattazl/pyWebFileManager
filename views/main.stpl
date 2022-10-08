@@ -27,12 +27,15 @@
           </button>
           <div class="navbar-brand">
             <div style="font-size:12px;">Search files in this folder : <input size=12 value="" onkeypress="searchFiles('{{data['title']}}',this)">
-            <form style="margin:0px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="filePath" value ="{{data['title']}}">
-            <input type="hidden" name="uploadFileName" id="uploadFileName" value ="">
-            Upload File to this folder: <input type="file" name="myFile" id="myFile" style="font-size:12px;display:inline" name="fileUpload"/>
-            <input type="submit" onclick="return uploadFile()" value="上传文件" style="font-size:12px;display:inline" /></div>
-            </form>
+			%if data['is_admin']:
+        <form style="margin:0px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="filePath" value ="{{data['title']}}">
+          <input type="hidden" name="uploadFileName" id="uploadFileName" value ="">
+          Upload File to this folder: <input type="file" name="myFile" id="myFile" style="font-size:12px;display:inline" name="fileUpload"/>
+          <input type="submit" onclick="return uploadFile()" value="上传文件" style="font-size:12px;display:inline" />
+			  </form>
+			%end
+			</div>
           </div>
         </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -42,7 +45,13 @@
           </div>
       </div>
     </nav>
-    <span id="alertMarker"></span>
+    <span id="alertMarker">
+      %if data['error'] is not None:
+        <div class="alert alert-danger">
+          {{data['error']}}
+        </div>
+      %end
+    </span>
     <div class="panel panel-default" id="main">
       <div class="panel-heading" >Browse files : <span id="navlink">{{data['title']}}</span></div>
       <table class="table">

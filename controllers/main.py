@@ -8,6 +8,7 @@ from security import security
 from utils import utils, chmod
 import os, json, urllib,re
 
+syscode = sys.getfilesystemencoding()
 @route('/')
 def redirect_home():
     """Main route : redirect to app home."""
@@ -30,20 +31,25 @@ def list():
     else:
         toplevel = False
     current_dir = config.root_path + path
-    all_files = os.listdir(current_dir)
-    dir_list = [d for d in os.listdir(current_dir) if os.path.isdir(os.path.join(current_dir, d))]
-    f = current_dir + "/.settings"
-    if os.path.exists(f):
-        settings_file = open(f, "r+")
-        settings_json = json.load(settings_file)
-        settings_file.close()
-    dir_list.sort(key=lambda d: d.lower())
-    file_list = [f for f in os.listdir(current_dir) if os.path.isfile(os.path.join(current_dir, f))]
-    file_list.sort(key=lambda d: d.lower())
-    all_files = dir_list + file_list
+    try:
+        all_files = os.listdir(current_dir)
+        dir_list = [d for d in os.listdir(current_dir) if os.path.isdir(os.path.join(current_dir, d))]
+        f = current_dir + "/.settings"
+        if os.path.exists(f):
+            settings_file = open(f, "r+")
+            settings_json = json.load(settings_file)
+            settings_file.close()
+        dir_list.sort(key=lambda d: d.lower())
+        file_list = [f for f in os.listdir(current_dir) if os.path.isfile(os.path.join(current_dir, f))]
+        file_list.sort(key=lambda d: d.lower())
+        all_files = dir_list + file_list
+    except Exception as e:
+        errInfo = {"title": path.decode(syscode).encode("utf-8"), "full_path": config.root_path, "path": path, "list": [],
+        "toplevel": toplevel, "fileList": [], "is_auth": is_auth,
+        "is_admin": is_admin, "error": 'Read Error!'+str(e), "app_dir": config.app_dir}
+        return dict(data=errInfo)
     fileList = []
     id = 1
-    syscode = sys.getfilesystemencoding()
     for item in all_files:
         if item in config.exclude:
             pass
@@ -53,7 +59,8 @@ def list():
             else:
                 filepath = path + "/" + item
             file = config.root_path + path + '/' + item
-            fileList.append({"name": item.decode(syscode).encode("utf-8"), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
+            item = item.decode(syscode).encode("utf-8")
+            fileList.append({"name": item, "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
                 "date": utils.date_file(config.root_path +filepath), "size": utils.get_file_size(config.root_path + filepath),
                 "id": id, "chmod":chmod.get_pretty_chmod(file)})
             id = id + 1
