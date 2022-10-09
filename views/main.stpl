@@ -29,7 +29,7 @@
             <div style="font-size:12px;">Search files in this folder : <input size=12 value="" onkeypress="searchFiles('{{data['title']}}',this)">
 			%if data['is_admin']:
         <form style="margin:0px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="filePath" value ="{{data['title']}}">
+          <input type="hidden" name="filePath" id="currPath" value ="{{data['title']}}">
           <input type="hidden" name="uploadFileName" id="uploadFileName" value ="">
           Upload File to this folder: <input type="file" name="myFile" id="myFile" style="font-size:12px;display:inline" name="fileUpload"/>
           <input type="submit" onclick="return uploadFile()" value="上传文件" style="font-size:12px;display:inline" />
@@ -46,7 +46,7 @@
       </div>
     </nav>
     <span id="alertMarker">
-      %if data['error'] is not None:
+      %if data['error'] is not None and data['error']!='':
         <div class="alert alert-danger">
           {{data['error']}}
         </div>

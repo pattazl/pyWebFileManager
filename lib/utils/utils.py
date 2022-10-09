@@ -1,6 +1,7 @@
 import os, time
 
 """Utils here."""
+import sys 
 
 def get_icon(full_path, path, filename):
     """Get icon, based on file name."""
@@ -59,3 +60,22 @@ def size_format(bytes):
     else:
         size = '%.2f bytes' % bytes
     return size
+
+# str sys -> utf8 , if flag = false is utf8->sys
+syscode = sys.getfilesystemencoding()
+def toUTF8(myStr,flag=True):
+    global syscode
+    if myStr is None:
+        myStr='' 
+    if syscode.lower()=='utf-8':
+        return myStr
+    else:
+        try:
+            if flag:
+                resStr = myStr.decode(syscode).encode("utf-8")
+            else:
+                resStr = myStr.decode("utf-8").encode(syscode)
+        except Exception as e:
+            resStr = myStr
+            #syscode = 'utf-8'
+        return resStr

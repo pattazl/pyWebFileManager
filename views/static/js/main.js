@@ -77,7 +77,7 @@ $(document).ready(function () {
     showHideLoading(".no-input");
     // send request
     $.ajax({
-      url: "rename?itemId=" + itemId + "&srcPath=" + srcPath + "&dstPath=" + dstPath,
+      url: "rename?itemId=" + itemId + "&srcPath=" + srcPath + "&dstPath=" + dstPath+"&currPath=" + currPath.value,
       context: document.body,
       error: function (result, statut, error) {
         // remove spinner, display message
@@ -90,6 +90,10 @@ $(document).ready(function () {
         // update icon, based on file type
         var jsonData = jQuery.parseJSON(http_code.responseText);
         $('#href' + jsonData['itemId'] + ' i').attr('class', 'fa fa-' + jsonData['filetype']);
+        if((jsonData.error||'')!='')
+        {
+          displayAlertBox(jsonData.error)
+        }
       }
     });
   }

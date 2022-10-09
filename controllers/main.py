@@ -8,19 +8,6 @@ from security import security
 from utils import utils, chmod
 import os, json, urllib,re
 
-syscode = sys.getfilesystemencoding()
-def toUTF8(myStr):
-    global syscode
-    if syscode.lower()=='utf-8':
-        return myStr
-    else:
-        try:
-            resStr = myStr.decode(syscode).encode("utf-8")
-        except Exception as e:
-            resStr = myStr
-            syscode = 'utf-8'
-        return resStr
-
 @route('/')
 def redirect_home():
     """Main route : redirect to app home."""
@@ -56,7 +43,7 @@ def list():
         file_list.sort(key=lambda d: d.lower())
         all_files = dir_list + file_list
     except Exception as e:
-        errInfo = {"title": toUTF8(path), "full_path": config.root_path, "path": path, "list": [],
+        errInfo = {"title": utils.toUTF8(path), "full_path": config.root_path, "path": path, "list": [],
         "toplevel": toplevel, "fileList": [], "is_auth": is_auth,
         "is_admin": is_admin, "error": 'Read Error!'+str(e), "app_dir": config.app_dir}
         return dict(data=errInfo)
@@ -72,12 +59,12 @@ def list():
                 filepath = path + "/" + item 
             file = config.root_path + path + '/' + item
 
-            fileList.append({"name": toUTF8(item), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
+            fileList.append({"name": utils.toUTF8(item), "path": urllib.quote(filepath), "filetype": utils.get_icon(config.root_path, request.GET.get('path'), item),
                 "date": utils.date_file(config.root_path +filepath), "size": utils.get_file_size(config.root_path + filepath),
                 "id": id, "chmod":chmod.get_pretty_chmod(file)})
             id = id + 1
 
-    data = {"title": toUTF8(path), "full_path": config.root_path, "path": path, "list": all_files,
+    data = {"title": utils.toUTF8(path), "full_path": config.root_path, "path": path, "list": all_files,
         "toplevel": toplevel, "fileList": fileList, "is_auth": is_auth,
         "is_admin": is_admin, "error": request.GET.get('error'), "app_dir": config.app_dir}
     return dict(data=data)
@@ -85,7 +72,7 @@ def list():
 @route(config.app_dir+'/search')
 def search():
 #   arr = os.path.split(path)
-#   path2  = os.altsep.join(arr) 
+#   path2  = os.sep.join(arr) 
     path = request.GET.get('path')
     current_dir = config.root_path + path
     val = request.GET.get('key')
@@ -106,7 +93,7 @@ def search():
 @route(config.app_dir+'/getFolderSize')
 def getFolderSize():
 #   arr = os.path.split(path)
-#   path2  = os.altsep.join(arr) 
+#   path2  = os.sep.join(arr) 
     path = request.GET.get('path')
     current_dir = config.root_path + path
     size = utils.size_format(get_dir_size(current_dir))

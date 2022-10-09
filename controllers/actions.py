@@ -48,14 +48,18 @@ def do_upload():
     data = request.files.get('myFile')
     #print data
     # name, ext = os.path.splitext(data.filename) 
-    serverPath = config.root_path + path + os.altsep + uploadFileName
-    #return serverPath
-    if (os.path.exists(serverPath)):
+    # serverPath = config.root_path + path + os.sep + uploadFileName
+    serverPath = os.path.join(config.root_path + path ,uploadFileName)
+    sysServerPath = utils.toUTF8(serverPath,False)
+    if (os.path.exists(sysServerPath)):
         return "Server File: '"+serverPath+"' is exist"
     #new_file = open(serverPath, "w+")
     #new_file.write(data.file.read())
-    data.save(serverPath.encode(syscode))
-    redirect(config.app_dir+"/?path=" + path.decode('utf-8').encode(syscode))
+    try:
+        data.save(sysServerPath)
+    except Exception as e:
+        return repr(e)
+    redirect(config.app_dir+"/?path=" + utils.toUTF8(path,False))
 
 
 @route(config.app_dir+'/rename')
@@ -63,22 +67,23 @@ def rename():
     """Rename a file/directory : only the admin can do this."""
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
-    srcPath = config.root_path+'/'+request.GET.get('srcPath').decode('utf-8').encode(syscode)
-    dstPath = config.root_path+'/'+request.GET.get('dstPath').decode('utf-8').encode(syscode)
+    currPath = utils.toUTF8(request.GET.get('currPath'),False)
+    srcPath = os.path.join(config.root_path+currPath , utils.toUTF8(request.GET.get('srcPath'),False))
+    dstPath = os.path.join(config.root_path+currPath , utils.toUTF8(request.GET.get('dstPath'),False))
     itemId = request.GET.get('itemId');
-
+    error = ''
     if srcPath == dstPath:
         return None
     if config.log_debug:
-        print("user wants to rename '"+repr(srcPath)+"' to '"+repr(dstPath))
+        print("user wants to rename '"+srcPath+"' to '"+dstPath)
     try:
         os.rename(srcPath, dstPath)
-    except Exception, e:
+    except Exception as e:
         if config.log_debug:
             print("Can't rename file")
-            print(repr(e))
-    return '{"itemId": "'+itemId+'", "filetype": "'+utils.get_icon(
-        config.root_path, request.GET.get('path'), dstPath)+'"}'
+            error = repr(e)
+    return dict({"itemId": itemId, "filetype":utils.get_icon(
+        config.root_path, request.GET.get('path'), dstPath),"error":error})
 
 
 @route(config.app_dir+'/download')
