@@ -89,9 +89,9 @@ def my_static_file(filename, root,
                 download=False,
                 charset='UTF-8',
                 etag=None):
-    root = os.path.join(os.path.abspath(root), '')
-    filename = os.path.abspath(os.path.join(root, filename.strip('/\\')))
-    stats = os.stat(filename)
+    myRoot = os.path.join(os.path.abspath(root), '')
+    myFilename = os.path.abspath(os.path.join(myRoot, filename.strip('/\\')))
+    stats = os.stat(myFilename)
     if stats.st_size > config.maxFileSize:
         return HTTPError(413, "File Size["+str(stats.st_size)+"]byte out of Max["+str(config.maxFileSize)+"]byte")
     return static_file(filename, root,
