@@ -1,7 +1,10 @@
 import os, time
+import sys 
+from bottle import static_file,HTTPError
+from config import config
 
 """Utils here."""
-import sys 
+
 
 def get_icon(full_path, path, filename):
     """Get icon, based on file name."""
@@ -79,3 +82,20 @@ def toUTF8(myStr,flag=True):
             resStr = myStr
             #syscode = 'utf-8'
         return resStr
+
+# use the max size of file which will read
+def my_static_file(filename, root,
+                mimetype=True,
+                download=False,
+                charset='UTF-8',
+                etag=None):
+    root = os.path.join(os.path.abspath(root), '')
+    filename = os.path.abspath(os.path.join(root, filename.strip('/\\')))
+    stats = os.stat(filename)
+    if stats.st_size > config.maxFileSize:
+        return HTTPError(413, "File Size["+str(stats.st_size)+"]byte out of Max["+str(config.maxFileSize)+"]byte")
+    return static_file(filename, root,
+                mimetype,
+                download,
+                charset,
+                etag)

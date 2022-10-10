@@ -92,7 +92,7 @@ def download():
     if not security.is_authenticated_admin(request.get_cookie("login"), request.get_cookie("password")):
         return None
     filename = request.GET.get('path')
-    return static_file(filename, root=config.root_path, download=filename)
+    return utils.my_static_file(filename, root=config.root_path, download=filename)
 
 
 @route(config.app_dir+'/delete')
