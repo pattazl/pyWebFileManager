@@ -45,24 +45,7 @@ def date_file(path):
 
 def get_file_size(path):
     bytes = float(os.path.getsize(path))
-    return size_format(bytes)
-def size_format(bytes):
-    """Get file size, human readable."""
-    if bytes >= 1099511627776:
-        terabytes = bytes / 1099511627776
-        size = '%.2f TB' % terabytes
-    elif bytes >= 1073741824:
-        gigabytes = bytes / 1073741824
-        size = '%.2f GB' % gigabytes
-    elif bytes >= 1048576:
-        megabytes = bytes / 1048576
-        size = '%.2f MB' % megabytes
-    elif bytes >= 1024:
-        kilobytes = bytes / 1024
-        size = '%.2f KB' % kilobytes
-    else:
-        size = '%.2f bytes' % bytes
-    return size
+    return bytes
 
 # str sys -> utf8 , if flag = false is utf8->sys
 syscode = sys.getfilesystemencoding()

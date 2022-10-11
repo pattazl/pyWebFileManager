@@ -96,7 +96,7 @@ def getFolderSize():
 #   path2  = os.sep.join(arr) 
     path = request.GET.get('path')
     current_dir = config.root_path + path
-    size = utils.size_format(get_dir_size(current_dir))
+    size = get_dir_size(current_dir)
     return dict(data=size)
 
 def get_dir_size(dir):

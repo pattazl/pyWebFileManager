@@ -101,7 +101,7 @@
             <td>{{row['chmod']}}</td>
             <td>
               %if row['filetype'] != 'folder-o':
-                {{row['size']}}
+                <span name="fileSizeList">{{row['size']}}</span>
               %else:
                 <div style="cursor:pointer" onclick="getSize('{{row['path']}}',this)" title="click and get size">N/A</div>
               %end

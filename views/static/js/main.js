@@ -169,6 +169,12 @@ $(document).ready(function () {
   }
   $('#navlink').html(arrLink.join('/'))
   // search event
+  // convert the size
+  document.getElementsByName('fileSizeList').forEach(x=>{
+    let size = x.innerHTML ;
+    x.innerHTML = renderSize(size)
+    x.title = size + ' Bytes'
+  })
 });
 // ajax get foloder size
 async function getSize(path, obj) {
@@ -177,6 +183,7 @@ async function getSize(path, obj) {
     //clearInterval(obj.handle)
   }
   let count = 1, maxLen = 7;
+  obj.title = '';
   obj.handle = setInterval(function () {
     obj.innerHTML = '.'.repeat(count++ % maxLen).padEnd(maxLen, ' ')
   }, 500)
@@ -193,7 +200,8 @@ async function getSize(path, obj) {
     if (res.data.length == 0) {
       obj.innerHTML ='Not Found!'
     } else {
-      obj.innerHTML = res.data
+      obj.innerHTML = renderSize(res.data)
+      obj.title = res.data+' Bytes'
     }
 
   }
@@ -247,4 +255,21 @@ function uploadFile()
   }
   uploadFileName.value = (myFile.value.split(/[/\\]/g).pop())
   return true
+}
+/// <summary>
+/// 格式化文件大小的JS方法
+/// </summary>
+/// <param name="filesize">文件的大小,传入的是一个bytes为单位的参数</param>
+/// <returns>格式化后的值</returns>
+function renderSize(filesize){
+  if(null==filesize||filesize==''){
+      return "0 B";
+  }
+  var unitArr = new Array("B","KB","MB","GB","TB","PB","EB","ZB","YB");
+  var index=0;
+  var srcsize = parseFloat(filesize);
+  index=Math.floor(Math.log(srcsize)/Math.log(1024));
+  var size =srcsize/Math.pow(1024,index);
+  size=size.toFixed(2);//保留的小数位数
+  return size+unitArr[index];
 }
