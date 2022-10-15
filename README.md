@@ -11,6 +11,15 @@ pyFileManager
 
 A simple web file manager in Python.
 
+![screenshot](screenshot.png)
+
+#### Usage:
+
+1. install python 2.x
+2. check config at `lib\config\config.py`
+3. make cwd(current working directory) is this program , run `python ./server.py`
+4. open the browser and go to the http://127.0.0.1:8083（default）
+
 ---
 
 #### FEATURES :

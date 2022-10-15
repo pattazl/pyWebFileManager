@@ -75,19 +75,31 @@ def search():
 #   path2  = os.sep.join(arr) 
     path = request.GET.get('path')
     current_dir = config.root_path + path
+    searchFolder = request.GET.get('searchFolder')
     val = request.GET.get('key')
     fileList = []
     count = 0
     for d in os.walk(current_dir):  #parent,dirnames,filenames
         if count >= config.max_num_search:
             break
-        # case 2:  
-        for filename in d[2]:
-            path = os.path.join(d[0],filename)
-            if re.search(val, path, re.IGNORECASE):
-                count = count + 1
-                if count <= config.max_num_search:
-                    fileList.append(path)
+        # case 2: 
+        if searchFolder =="1":
+            for filename in d[1]:
+                if re.search(val, filename, re.IGNORECASE):
+                    count = count + 1
+                    if count <= config.max_num_search:
+                        path = os.path.join(d[0],filename)
+                        path = os.path.relpath(path, config.root_path)
+                        fileList.append(path)
+        else:
+            for filename in d[2]:
+                path = os.path.join(d[0],filename)
+                # get relative path for safety
+                path = os.path.relpath(path, config.root_path)
+                if re.search(val, path, re.IGNORECASE):
+                    count = count + 1
+                    if count <= config.max_num_search:
+                        fileList.append(path)
     return dict(data=fileList,msg={"count":count,"max":config.max_num_search})
 
 @route(config.app_dir+'/getFolderSize')

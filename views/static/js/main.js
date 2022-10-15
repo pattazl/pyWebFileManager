@@ -156,7 +156,7 @@ $(document).ready(function () {
   });
   // CHANGE NAV link style
   let linkTxt = $('#navlink').html()
-  let arr = linkTxt.split('/');
+  let arr = linkTxt.split(/[\\/]+/);
   let arrLink = ['<a href="?path=/#"> / </a>'];
   let preLink = ''
   for (let k of arr) {
@@ -190,7 +190,7 @@ async function getSize(path, obj) {
   let res = await fetch(`getFolderSize?path=${path}`).then(res => {
     return res.json()
   }).catch(err => {
-    obj.innerHTML = 'search Error!'+err.message
+    obj.innerHTML = 'get Size Error!'+err.message
   })
 
   clearInterval(obj.handle)
@@ -225,7 +225,8 @@ async function searchFiles(path, obj) {
       hint.html('.'.repeat((count++ % maxLen) + 1).padEnd(maxLen, ' '))
     }, 500)
     // search?path=/views/static&key=main
-    let res = await fetch(`search?path=${path}&key=${val}`).then(res => {
+    let  folder = $('#searchFolder').is(':checked')?1:0
+    let res = await fetch(`search?path=${path}&key=${val}&searchFolder=${folder}`).then(res => {
       return res.json()
     }).catch(err => {
       hint.html('search Error!'+err.message)
@@ -239,7 +240,20 @@ async function searchFiles(path, obj) {
         hint.html('Not Found!')
       } else {
         let count = res?.msg?.count??0, max = res?.msg?.max??0;
-        hint.html(`<div style="color:${count>=max?'red':'blue'}">Found ${count}/${max}</div>${res.data.join('<br>')}`)
+        let searchHtml = '';
+        res.data.forEach(x=>{
+          let link = '';
+          if($('#searchFolder').is(':checked'))
+          {
+            link = x
+          }else{
+            let arr = x.split(/[\\/]+/);
+            arr.pop()
+            link = arr.join('/')
+          }
+          searchHtml += `<div><a target="blank" href="?path=/${link}">${x}</a></div>`
+        })
+        hint.html(`<div style="color:${count>=max?'red':'blue'}">Found/Max : ${count}/${max}</div>${searchHtml}`)
       }
 
     }

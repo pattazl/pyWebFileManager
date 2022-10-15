@@ -15,7 +15,7 @@
   <script type="text/javascript" src="js/main.js" defer></script>
 </head>
 <body>
-  <div class="container">
+  <div class="container"><div style="position:absolute;left:20px;top:5px;font-weight:bold;z-index:10">v1.0.221015</div>
     %if data['is_auth']:
     <nav class="navbar navbar-default">
       <div class="container-fluid">
@@ -26,9 +26,10 @@
             <span class="icon-bar"></span>
           </button>
           <div class="navbar-brand">
-            <div style="font-size:12px;">Search files in this folder : <input size=12 value="" onkeypress="searchFiles('{{data['title']}}',this)">
+            <div style="font-size:12px;">Search files in this folder : <input placeholder="support regex" size=12 value="" onkeypress="searchFiles('{{data['title']}}',this)">
+            <label for="searchFolder"><input type="checkbox" id="searchFolder" value="1">Only Folder</label>
 			%if data['is_admin']:
-        <form style="margin:0px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
+        <form style="margin:0px 0px 0px 20px;padding:0px;display:inline"  action="./upload" method="post" enctype="multipart/form-data">
           <input type="hidden" name="filePath" id="currPath" value ="{{data['title']}}">
           <input type="hidden" name="uploadFileName" id="uploadFileName" value ="">
           Upload File to this folder: <input type="file" name="myFile" id="myFile" style="font-size:12px;display:inline" name="fileUpload"/>
