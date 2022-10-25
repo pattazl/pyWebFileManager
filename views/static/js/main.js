@@ -13,7 +13,7 @@ $(document).ready(function () {
   });
 
   // when mouse enter the table : display buttons
-  $(".table tr").on('mouseenter', function () {
+  $(".table tr").on('mouseenter touchstart', function () {
     var overlay = $(this).find('span.overlay');
     overlay.css('visibility', 'visible');
   });
@@ -24,7 +24,14 @@ $(document).ready(function () {
     var overlay = $(this).find('span.overlay');
     overlay.css('visibility', 'hidden');
   });
-
+  // support touch , touchstart touchend
+  $(".table tr").on('touchstart', function () {
+    // hide all
+    $(".table tr").find('span.overlay').css('visibility', 'hidden');
+    // show current
+    var overlay = $(this).find('span.overlay');
+    overlay.css('visibility', 'visible');
+  });
 
   // on delete : triggered when modal is about to be shown
   $('#deleteModal').on('show.bs.modal', function (event) {
