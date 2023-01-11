@@ -17,8 +17,10 @@ def redirect_home():
 @view('main.stpl')
 def list():
     """App home : is building the file listing job."""
-    is_auth = security.is_authenticated_user(request.get_cookie("login"), request.get_cookie("password"))
-    is_admin = (is_auth and security.is_admin(request.get_cookie("login")))
+    user = request.get_cookie("login")
+    is_auth = security.is_authenticated_user(user, request.get_cookie("password"))
+    is_admin = (is_auth and security.is_admin(user))
+    config.changeRoot(user)
     path = request.GET.get('path')
     if not path:
         path = '/'

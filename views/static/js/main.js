@@ -162,7 +162,7 @@ $(document).ready(function () {
     });
   });
   // CHANGE NAV link style
-  let linkTxt = $('#navlink').html()
+  let linkTxt = $('#navlink').html()??''
   let arr = linkTxt.split(/[\\/]+/);
   let arrLink = ['<a href="?path=/#"> / </a>'];
   let preLink = ''
