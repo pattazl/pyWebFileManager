@@ -15,7 +15,7 @@
   <script type="text/javascript" src="js/main.js" defer></script>
 </head>
 <body>
-  <div class="container"><div style="position:absolute;left:20px;top:5px;font-weight:bold;z-index:10">v1.0.221015</div>
+  <div class="container"><div style="position:absolute;left:20px;top:5px;font-weight:bold;z-index:10">v1.1.230113</div>
     %if data['is_auth']:
     <nav class="navbar navbar-default">
       <div class="container-fluid">
@@ -41,7 +41,7 @@
         </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <p class="navbar-text navbar-right">
-              <a href="logout" class="navbar-link">Log out<i class="fa fa-sign-out" style="margin-left: 5px"></i></a>&nbsp;
+              <a href="logout" class="navbar-link">{{data['user']}} Log out<i class="fa fa-sign-out" style="margin-left: 5px"></i></a>&nbsp;
             </p>
           </div>
       </div>

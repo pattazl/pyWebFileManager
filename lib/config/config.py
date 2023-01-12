@@ -3,7 +3,8 @@ from security import security
 
 code_path = os.path.abspath(os.path.dirname(sys.argv[0])) # code path
 # default Path,will be changed by user_paths
-root_path = os.path.abspath("E:\\Code")   # code_path  
+default_path = os.path.abspath("E:\\Code") 
+root_path = default_path
 app_dir = '/filemanager'
 security.accounts = {"test": "test", "test2": "test2"}
 security.admins = ["test2"]
@@ -19,8 +20,10 @@ maxFileSize = 20*1024*1024  #  the max size(Byte) of file which will be read,sug
 def changeRoot(login):
     if login is None:
         return
-    user_root = user_paths[login]
+    user_root = user_paths.get(login)
+    global root_path
     if user_root is not None and os.path.exists(user_root):
-        global root_path
         root_path = user_root
-        print 'inner changeRoot '+root_path
+    else:
+        root_path = default_path
+    print 'inner changeRoot '+root_path

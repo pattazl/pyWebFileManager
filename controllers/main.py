@@ -47,7 +47,7 @@ def list():
     except Exception as e:
         errInfo = {"title": utils.toUTF8(path), "full_path": config.root_path, "path": path, "list": [],
         "toplevel": toplevel, "fileList": [], "is_auth": is_auth,
-        "is_admin": is_admin, "error": 'Read Error!'+str(e), "app_dir": config.app_dir}
+        "is_admin": is_admin, "error": 'Read Error!'+str(e), "app_dir": config.app_dir,"user":user}
         return dict(data=errInfo)
     fileList = []
     id = 1
@@ -68,7 +68,7 @@ def list():
 
     data = {"title": utils.toUTF8(path), "full_path": config.root_path, "path": path, "list": all_files,
         "toplevel": toplevel, "fileList": fileList, "is_auth": is_auth,
-        "is_admin": is_admin, "error": request.GET.get('error'), "app_dir": config.app_dir}
+        "is_admin": is_admin, "error": request.GET.get('error'), "app_dir": config.app_dir,"user":user}
     return dict(data=data)
 
 @route(config.app_dir+'/search')
